@@ -206,51 +206,45 @@ function removeAccents(str) {
 }
 
 async function executeSearch(query) {
-  if (!query) return alert("Vui lòng nhập tên địa điểm!");
+  showLoading(true);
+  if (!query) {
+    alert("Vui lòng nhập tên địa điểm!");
+    showLoading(false);
+    return;
+  }
   let mapFound = false;
   if (mapChart && mapChart.series[0]) {
     const points = mapChart.series[0].points;
-    const searchKey = removeAccents(query);
+    const searchKey = removeAccents(query); // Bỏ chọn tất cả các tỉnh thành trước khi tìm kiếm mới (tùy chọn)
+    mapChart.series[0].points.forEach((p) => p.select(false, true));
+
     const foundPoint = points.find((p) =>
       removeAccents(p.properties.name || "").includes(searchKey)
     );
 
     if (foundPoint) {
-      foundPoint.select(true, false);
-      foundPoint.zoomTo();
       mapFound = true;
+      foundPoint.select(true, false); // Chọn tỉnh/thành phố tìm thấy
+      foundPoint.zoomTo(); // Zoom vào khu vực
+
       const lat = parseFloat(foundPoint.properties.latitude);
       const lon = parseFloat(foundPoint.properties.longitude);
       if (!isNaN(lat) && !isNaN(lon)) {
-        fetchWeather(lat, lon, foundPoint.properties.name);
-        return;
+        // Nếu tìm thấy và có tọa độ, gọi API thời tiết
+        await fetchWeather(lat, lon, foundPoint.properties.name);
+      } else {
+        console.warn(
+          "Không tìm thấy tọa độ (lat/lon) cho địa điểm này trong GeoJSON."
+        );
       }
     }
-  }
-  let searchQuery = query;
-  if (!searchQuery.toLowerCase().includes("vietnam"))
-    searchQuery += ", Vietnam";
+  } // Nếu mapFound vẫn là false sau khi tìm kiếm trên bản đồ
 
-  showLoading(true);
-  try {
-    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-      searchQuery
-    )}&countrycodes=vn&limit=1`;
-    const res = await fetch(url);
-    const results = await res.json();
-
-    if (results.length > 0) {
-      const { lat, lon, display_name } = results[0];
-      const shortName = display_name.split(",")[0];
-      fetchWeather(parseFloat(lat), parseFloat(lon), shortName);
-    } else {
-      if (!mapFound) alert(`Không tìm thấy địa điểm: ${query}`);
-    }
-  } catch (e) {
-    console.error("Lỗi tìm kiếm:", e);
-  } finally {
-    showLoading(false);
+  if (!mapFound) {
+    alert(`Không có kết quả cho: ${query}`);
   }
+
+  showLoading(false);
 }
 
 function triggerSearch() {
