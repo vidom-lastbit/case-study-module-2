@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Case Study: Hệ Thống Quản Lý Thời Tiết</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <img
+      src="/image/CodegymX.png"
+      alt="logo"
+      class="logo"
+      onerror="this.style.display='none'"
+    />
+
+    <div class="map-wrapper">
+      <div class="search-container">
+        <input
+          type="text"
+          id="search-input"
+          placeholder="Nhập địa điểm (Vd: Hà Nội)..."
+          onkeypress="handleEnter(event)"
+        />
+        <button onclick="triggerSearch()" class="btn-search">Tìm</button>
+      </div>
+
+      <div id="map"></div>
+
+      <div id="sidebar" class="weather-sidebar hidden-sidebar">
+        <div class="sidebar-header">
+          <h2 class="sidebar-title">Thông tin chi tiết</h2>
+          <button onclick="closeSidebar()" class="btn-close-sidebar">
+            &times;
+          </button>
+        </div>
+        <div id="weather-content"></div>
+        <div class="sidebar-footer">Nguồn: Tomorrow.io</div>
+      </div>
+
+      <div id="loading" class="loading-overlay">
+        <div class="spinner"></div>
+      </div>
+    </div>
+
+    <div id="data-panel">
+      <div class="panel-header">
+        <h3 class="panel-title">
+          <i class="fas fa-table"></i> Dữ liệu thời tiết gần đây
+        </h3>
+        <button onclick="clearTable()" class="btn-clear">Xóa</button>
+      </div>
+      <div class="table-container">
+        <table class="weather-table">
+          <thead>
+            <tr>
+              <th>Thời gian</th>
+              <th>Địa điểm</th>
+              <th>Nhiệt độ</th>
+              <th>Cảm giác</th>
+              <th>Mưa (mm)</th>
+              <th>Mưa (%)</th>
+              <th>Gió</th>
+              <th>UV</th>
+            </tr>
+          </thead>
+          <tbody id="weather-table-body">
+            <tr id="empty-row">
+              <td colspan="8" class="empty-message">Chưa có dữ liệu.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="panel-footer">
+        <div class="running-text">
+          Trần Đức Mạnh - Mã học viên: CGHN007678 - Lớp: JV103_Bootcamp Java Web
+          Backend - Case Study: Ứng dụng quản lý thời tiết theo bản đồ địa lý
+          trong thời gian thực
+        </div>
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.6/proj4.js"></script>
+    <script src="https://code.highcharts.com/maps/highmaps.js"></script>
+    <script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/maps/modules/accessibility.js"></script>
+    <script src="/js/script.js"></script>
+  </body>
+</html>
