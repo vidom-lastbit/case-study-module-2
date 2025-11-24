@@ -7,10 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-@Service
+@Service //Cho phép tiêm vào các lớp khác
 public class WeatherService {
 
-    @Value("${weather.api.key}")
+    @Value("${weather.api.key}") //Nhận khóa API của tommorrow.io từ file cấu hình
     private String apiKey;
     private final String API_URL = "https://api.tomorrow.io/v4/weather/realtime?location={lat},{lon}&apikey={key}";
     @SuppressWarnings("null") 
@@ -38,7 +38,7 @@ public class WeatherService {
         }
     }
 
-    private WeatherData parseResponse(String jsonResponse, double lat, double lon, String locationName) {
+    private WeatherData parseResponse(String jsonResponse, double lat, double lon, String locationName) {// Chuẩn hoá dữ liệu từ JSON trả về
         try {
             JSONObject root = new JSONObject(jsonResponse);
             JSONObject dataBlock = root.getJSONObject("data");

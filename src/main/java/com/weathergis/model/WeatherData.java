@@ -6,15 +6,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "weather_history")
+@Entity //Bản ghi dữ liệu thời tiết lịch sử
+@Table(name = "weather_history") 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@AllArgsConstructor //Tạo constructor với tất cả các tham số
+@NoArgsConstructor //Tạo constructor không tham số
 public class WeatherData {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Tự động sinh ID
     private Long id;
 
     // --- CƠ BẢN ---
@@ -61,7 +61,7 @@ public class WeatherData {
     @Column(name = "recorded_at")
     private LocalDateTime recordedAt;
 
-    @PrePersist
+    @PrePersist // Gán thời gian hiện tại khi tạo bản ghi mới
     protected void onCreate() {
         this.recordedAt = LocalDateTime.now();
     }
